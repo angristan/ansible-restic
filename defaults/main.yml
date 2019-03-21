@@ -3,7 +3,8 @@
 restic_install: false
 restic_version: 0.9.4
 restic_path: /usr/local/bin/restic
-restic_env_file_path: /root/.restic_env
+restic_user: root
+restic_user_home: /root
 
 restic_repository_name: restic
 restic_default_folders:
@@ -19,9 +20,7 @@ restic_check: true
 
 restic_ssh_host: backup
 restic_ssh_port: 22 
-restic_ssh_private_key_path: '~/.ssh/backup'
-restic_ssh_public_key_path: '~/.ssh/backup.pub'
+restic_ssh_private_key_path: '/root/.ssh/backup'
 
-restic_user: root
 restic_systemd_timer_on_calender: '*-*-* 03:00:00'
 restic_systemd_timer_randomized_delay_sec: 0

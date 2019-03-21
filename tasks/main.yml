@@ -11,7 +11,7 @@
 - name: Overwrite SSH config for backup server
   template:
     src: ssh_config.j2
-    dest: /root/.ssh/config
+    dest: "{{ restic_user_home }}/.ssh/config"
     owner: root
     group: root
     mode: 0600
@@ -26,7 +26,7 @@
 - name: Add restic_env in home folder
   template:
     src: restic_env.j2
-    dest: restic_env_file_path
+    dest: "{{ restic_user_home }}/.restic_env"
     owner: root
     group: root
     mode: 0600
