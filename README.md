@@ -78,13 +78,13 @@ You can see the logs of the backup with `journalctl`. (`journalctl -xefu restic-
     - {name: website2, dump_command: mysqldump website2}
     restic_password: mysuperduperpassword
     restic_ssh_private_key: |-
-      '-----BEGIN OPENSSH PRIVATE KEY-----
+      -----BEGIN OPENSSH PRIVATE KEY-----
       b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
       QyNTUxOQAAACAocs5g1I4kFQ1HH/YZiVU+zLhRDu4tfzZ9CmFAfKhL2AAAAJi02XEwtNlx
       MAAAAAtzc2gtZWQyNTUxOQAAACAocs5g1I4kFQ1HH/YZiVU+zLhRDu4tfzZ9CmFAfKhL2A
       AAAEADZf2Pv4G74x+iNtuwSV/ItnR3YQJ/KUaNTH19umA/tChyzmDUjiQVDUcf9hmJVT7M
       uFEO7i1/Nn0KYUB8qEvYAAAAE3N0YW5pc2xhc0BtYnAubG9jYWwBAg==
-      -----END OPENSSH PRIVATE KEY-----'
+      -----END OPENSSH PRIVATE KEY-----
 ```
 
 Of course, `restic_password` and `restic_ssh_private_key` should be stored using ansible-vault.
