@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/angristan/ansible-restic.svg?style=svg)](https://circleci.com/gh/angristan/ansible-restic)
 
-This role will setup Restic backups on a Debian/Ubuntu machine using a systemd service and timer.
+This role will setup [Restic](https://restic.net/) backups on a Debian/Ubuntu machine using a systemd service and timer.
 
 It is a bit specific since it assumes you want to use a SFTP backend for restic and will thus setup the SSH config and SSH private keys (see variables below).
 
