@@ -1,7 +1,7 @@
 ---
 
 - name: Check if restic is installed
-  stat: 
+  stat:
     path: "{{ restic_path }}"
   register: restic_binary
 
