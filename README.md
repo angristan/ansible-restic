@@ -66,7 +66,7 @@ You can see the logs of the backup with `journalctl`. (`journalctl -xefu restic-
 ---
 
 - hosts: myhost
-  roles: caddy
+  roles: restic
   vars:
     restic_ssh_user: backupuser
     restic_ssh_hostname: storage-server.infra.tld
