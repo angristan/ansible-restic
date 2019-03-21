@@ -1,0 +1,10 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: python:3-slim
+    steps:
+      - checkout
+      - run: pip install ansible-lint
+      - run: ansible-lint --version
+      - run: ansible-lint .
