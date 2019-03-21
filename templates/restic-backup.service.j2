@@ -3,5 +3,26 @@ Description=Restic backup
 
 [Service]
 Type=oneshot
-ExecStart={{ restic_script_path }}
 User={{ restic_user }}
+Environment="RESTIC_REPOSITORY=sftp:{{ restic_ssh_host }}:{{ restic_repository_name }}"
+Environment="RESTIC_PASSWORD={{ restic_password}}"
+
+{% if restic_check %}
+ExecStartPre={{ restic_path }} check
+{% endif -%}
+
+{% for folder in restic_folders_combined %}
+ExecStart={{ restic_path }} backup --verbose {{ folder.path }} {{ folder.exclude if folder.exclude is defined else '' }}
+{% endfor -%}
+
+{% for database in restic_databases %}
+ExecStart={{ database.dump_command}} | {{ restic_path }} backup --verbose --stdin --stdin-filename {{ database.name }}.sql
+{% endfor -%}
+
+{% if restic_forget %}
+ExecStartPost={{ restic_path }} forget --keep-within {{ restic_forget_keep_within }}
+{% endif -%}
+
+{% if restic_prune %}
+ExecStartPost={{ restic_path }} prune
+{% endif -%}

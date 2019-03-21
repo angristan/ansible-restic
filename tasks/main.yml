@@ -2,14 +2,13 @@
 
 - name: Check if restic is installed
   stat: 
-    path: /usr/local/bin/restic
+    path: "{{ restic_path }}"
   register: restic_binary
-
 
 - include_tasks: install.yml
   when: not restic_binary.stat.exists or restic_install
 
-- name: Add SSH config
+- name: Overwrite SSH config for backup server
   template:
     src: ssh_config.j2
     dest: /root/.ssh/config
@@ -24,33 +23,27 @@
     mode: 0600
   when: restic_ssh_private_key is defined
 
-- name: Add restic-env
+- name: Add restic_env in home folder
   template:
-    src: restic-env.j2
-    dest: /root/.restic-env
+    src: restic_env.j2
+    dest: restic_env_file_path
     owner: root
     group: root
     mode: 0600
-
-- name: Add restic-backup.sh
-  template:
-    src: restic-backup.sh.j2
-    dest: /root/restic-backup.sh
-    owner: root
-    group: root
-    mode: 0700
-  vars:
-    restic_folders_combined: '{{ restic_default_folders + restic_folders }}'
 
 - name: Add systemd service for restic
   template:
     src: restic-backup.service.j2
     dest: /etc/systemd/system/restic-backup.service
+  vars:
+    restic_folders_combined: '{{ restic_default_folders + restic_folders }}'
+  notify: systemd reload
 
 - name: Add systemd timer for restic
   template:
     src: restic-backup.timer.j2
     dest: /etc/systemd/system/restic-backup.timer
+  notify: systemd reload
 
 - name: Enable restic timer
   systemd:

@@ -1,9 +1,10 @@
 ---
-- name: Install fuse
+
+- name: Install fuse (to mount repositories)
   apt:
     name: fuse
 
-- name: Install bzip2
+- name: Install bzip2 (to install restic)
   apt:
     name: bzip2
 
@@ -21,7 +22,7 @@
   copy:
     remote_src: true
     src: '/tmp/restic_{{ restic_version }}_linux_amd64'
-    dest: /usr/local/bin/restic
+    dest: "{{ restic_path }}"
     mode: 0755
 
 - name: Remove downloaded file
