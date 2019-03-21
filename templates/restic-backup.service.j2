@@ -1,0 +1,7 @@
+[Unit]
+Description=Restic backup
+
+[Service]
+Type=oneshot
+ExecStart={{ restic_script_path }}
+User={{ restic_user }}

@@ -1,0 +1,26 @@
+#!/bin/bash
+
+source ~/.restic-env
+
+echo -e "\n`date` - Starting backup...\n"
+
+{% for folder in restic_folders_combined %}
+restic backup --verbose {{ folder.path }} {{ folder.exclude if folder.exclude is defined else '' }}
+{% endfor %}
+
+{% for database in restic_databases %}
+{{ database.dump_command}} | restic backup --verbose --stdin --stdin-filename {{ database.name }}.sql
+{% endfor -%}
+
+echo -e "\n`date` - Running forget and prune...\n"
+
+{% if restic_forget %}
+restic forget --keep-within {{ restic_forget_keep_within }}
+{% endif %}
+
+{% if restic_prune %}
+restic prune
+{% endif %}
+
+echo -e "\n`date` - Backup finished.\n"
+

@@ -1,0 +1,30 @@
+---
+- name: Install fuse
+  apt:
+    name: fuse
+
+- name: Install bzip2
+  apt:
+    name: bzip2
+
+- name: Download restic
+  get_url:
+    url: 'https://github.com/restic/restic/releases/download/v{{ restic_version }}/restic_{{ restic_version }}_linux_amd64.bz2'
+    dest: '/tmp/restic_{{ restic_version }}_linux_amd64.bz2'
+
+- name: Extract restic
+  command: 'bzip2 -d /tmp/restic_{{ restic_version }}_linux_amd64.bz2'
+  args:
+    creates: '/tmp/restic_{{ restic_version }}_linux_amd64'
+
+- name: Install restic
+  copy:
+    remote_src: true
+    src: '/tmp/restic_{{ restic_version }}_linux_amd64'
+    dest: /usr/local/bin/restic
+    mode: 0755
+
+- name: Remove downloaded file
+  file:
+    path: '/tmp/restic_{{ restic_version }}_linux_amd64'
+    state: absent

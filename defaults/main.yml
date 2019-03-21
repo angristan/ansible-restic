@@ -1,0 +1,25 @@
+---
+
+restic_install: false
+restic_version: 0.9.4
+restic_script_path: /root/restic-backup.sh
+
+restic_repository_name: restic
+restic_default_folders:
+  - {path: '/etc'}
+  - {path: '/var/log'}
+  - {path: '/root', exclude: '--exclude .cache --exclude .local'}
+restic_folders: []
+restic_databases: []
+restic_forget: true
+restic_forget_keep_within: 30d
+restic_prune: true
+
+restic_ssh_host: backup
+restic_ssh_port: 22 
+restic_ssh_private_key_path: '~/.ssh/backup'
+restic_ssh_public_key_path: '~/.ssh/backup.pub'
+
+restic_user: root
+restic_systemd_timer_on_calender: '*-*-* 03:00:00'
+restic_systemd_timer_randomized_delay_sec: 0

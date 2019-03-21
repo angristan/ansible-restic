@@ -1,0 +1,58 @@
+---
+
+- name: Check if restic is installed
+  stat: 
+    path: /usr/local/bin/restic
+  register: restic_binary
+
+
+- include_tasks: install.yml
+  when: not restic_binary.stat.exists or restic_install
+
+- name: Add SSH config
+  template:
+    src: ssh_config.j2
+    dest: /root/.ssh/config
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Add SSH private key
+  template:
+    src: ssh_private_key.j2
+    dest: '{{ restic_ssh_private_key_path }}'
+    mode: 0600
+  when: restic_ssh_private_key is defined
+
+- name: Add restic-env
+  template:
+    src: restic-env.j2
+    dest: /root/.restic-env
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Add restic-backup.sh
+  template:
+    src: restic-backup.sh.j2
+    dest: /root/restic-backup.sh
+    owner: root
+    group: root
+    mode: 0700
+  vars:
+    restic_folders_combined: '{{ restic_default_folders + restic_folders }}'
+
+- name: Add systemd service for restic
+  template:
+    src: restic-backup.service.j2
+    dest: /etc/systemd/system/restic-backup.service
+
+- name: Add systemd timer for restic
+  template:
+    src: restic-backup.timer.j2
+    dest: /etc/systemd/system/restic-backup.timer
+
+- name: Enable restic timer
+  systemd:
+    name: restic-backup.timer
+    enabled: true
