@@ -4,8 +4,17 @@ Description=Restic backup
 [Service]
 Type=oneshot
 User={{ restic_user }}
+{% if restic_ssh_enabled %}
 Environment="RESTIC_REPOSITORY=sftp:{{ restic_ssh_host }}:{{ restic_repository_name }}"
+{% else %}
+Environment="RESTIC_REPOSITORY={{ restic_repository }}"
+{% endif -%}
 Environment="RESTIC_PASSWORD={{ restic_password}}"
+
+{% if restic_aws_access_key_id is defined and restic_aws_secret_access_key is defined %}
+Environment="AWS_ACCESS_KEY_ID={{ restic_aws_access_key_id}}"
+Environment="AWS_SECRET_ACCESS_KEY={{ restic_aws_secret_access_key}}"
+{% endif %}
 
 {% if restic_check %}
 ExecStartPre={{ restic_path }} check

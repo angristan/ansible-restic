@@ -1,2 +1,11 @@
-export RESTIC_REPOSITORY="sftp:{{ restic_ssh_host }}:{{ restic_repository_name }}"
-export RESTIC_PASSWORD="{{ restic_password}}"
+{% if restic_ssh_enabled %}
+export RESTIC_REPOSITORY=sftp:{{ restic_ssh_host }}:{{ restic_repository_name }}
+{% else %}
+export RESTIC_REPOSITORY="{{ restic_repository }}"
+{% endif -%}
+export RESTIC_PASSWORD={{ restic_password}}
+
+{% if restic_aws_access_key_id is defined and restic_aws_secret_access_key is defined %}
+export AWS_ACCESS_KEY_ID={{ restic_aws_access_key_id}}
+export AWS_SECRET_ACCESS_KEY={{ restic_aws_secret_access_key}}
+{% endif %}

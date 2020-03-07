@@ -15,13 +15,14 @@
     owner: root
     group: root
     mode: 0600
+  when: restic_ssh_enabled
 
 - name: Add SSH private key
   template:
     src: ssh_private_key.j2
     dest: '{{ restic_ssh_private_key_path }}'
     mode: 0600
-  when: restic_ssh_private_key is defined
+  when: restic_ssh_private_key is defined and restic_ssh_enabled
 
 - name: Add restic_env in home folder
   template:

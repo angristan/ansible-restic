@@ -4,7 +4,7 @@
 
 This role will setup [Restic](https://restic.net/) backups on a Debian/Ubuntu machine using a systemd service and timer.
 
-It is a bit specific since it assumes you want to use a SFTP backend for restic and will thus setup the SSH config and SSH private keys (see variables below).
+It supports S3 backend or SFTP backend and will thus setup the SSH config and SSH private keys (see variables below).
 
 ## Role Variables
 
@@ -47,6 +47,13 @@ The SSH configuration will be written in `{{ restic_user_home }}/.ssh/config`.
 - `restic_ssh_private_key_path`: path of the private key to use (`~/.ssh/backup`)
 - `restic_ssh_port`: SSH port to use with the backup machine (`23`)
 
+### S3 backend configuration
+
+- `restic_ssh_enabled`: set to false
+- `restic_repository_name`: set to s3 endpoint + bucket, restic syntax (e.g. `s3:https://s3.fr-par.scw.cloud/restic-bucket`)
+- `restic_aws_access_key_id`: `AWS_ACCESS_KEY_ID`
+- `restic_aws_secret_access_key`: `AWS_SECRET_ACCESS_KEY`
+
 ### Sytemd service and timer
 
 A `restic-backup.service` service will be created with all the parameters defined above. The service is of type `oneshot` and will be triggered periodically with `restic-backup.timer`.
@@ -85,6 +92,27 @@ You can see the logs of the backup with `journalctl`. (`journalctl -xefu restic-
       AAAEADZf2Pv4G74x+iNtuwSV/ItnR3YQJ/KUaNTH19umA/tChyzmDUjiQVDUcf9hmJVT7M
       uFEO7i1/Nn0KYUB8qEvYAAAAE3N0YW5pc2xhc0BtYnAubG9jYWwBAg==
       -----END OPENSSH PRIVATE KEY-----
+```
+
+S3 example:
+
+```yaml
+---
+
+- hosts: myhost
+  roles: restic
+  vars:
+    restic_ssh_enabled: false
+    restic_repository: "s3:https://s3.fr-par.scw.cloud/restic-bucket"
+    restic_aws_access_key_id: xxxxx
+    restic_aws_secret_access_key: xxxxx
+    restic_folders:
+      - {path: "/srv"}
+      - {path: "/var/www"}
+    restic_databases:
+    - {name: website, dump_command: sudo -Hiu postgres pg_dump -Fc website}
+    - {name: website2, dump_command: mysqldump website2}
+    restic_password: mysuperduperpassword
 ```
 
 Of course, `restic_password` and `restic_ssh_private_key` should be stored using ansible-vault.
