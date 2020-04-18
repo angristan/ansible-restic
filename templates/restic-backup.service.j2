@@ -25,7 +25,7 @@ ExecStart={{ restic_path }} backup --verbose {{ folder.path }} {{ folder.exclude
 {% endfor -%}
 
 {% for database in restic_databases %}
-ExecStart=/bin/sh -c "{{ database.dump_command }} | {{ restic_path }} backup --verbose --stdin --stdin-filename {{ database.name }}.sql"
+ExecStart=/bin/sh -c "{{ database.dump_command }} {{ '| pigz |' if restic_dump_compression_enabled else '|' }} {{ restic_path }} backup --verbose --stdin --stdin-filename {{ database.name }}{{ '.sql.gz' if restic_dump_compression_enabled else '.sql' }}"
 {% endfor -%}
 
 {% if restic_forget %}

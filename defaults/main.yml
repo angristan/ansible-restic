@@ -13,6 +13,7 @@ restic_default_folders:
   - {path: '/root', exclude: '--exclude .cache --exclude .local'}
 restic_folders: []
 restic_databases: []
+restic_dump_compression_enabled: false
 restic_forget: true
 restic_forget_keep_within: 30d
 restic_prune: true

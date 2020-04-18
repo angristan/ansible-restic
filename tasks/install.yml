@@ -8,6 +8,10 @@
   apt:
     name: bzip2
 
+- name: Install pigz (to compress db dumps)
+  apt:
+    name: pigz
+
 - name: Download restic
   get_url:
     url: 'https://github.com/restic/restic/releases/download/v{{ restic_version }}/restic_{{ restic_version }}_linux_amd64.bz2'
