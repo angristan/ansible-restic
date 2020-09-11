@@ -49,4 +49,4 @@
   systemd:
     name: restic-backup.timer
     enabled: true
-    started: true
+    state: started
