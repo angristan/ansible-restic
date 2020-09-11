@@ -35,6 +35,7 @@
   template:
     src: restic-backup.service.j2
     dest: /etc/systemd/system/restic-backup.service
+    mode: '0644'
   vars:
     restic_folders_combined: '{{ restic_default_folders + restic_folders }}'
   notify: systemd reload
@@ -43,6 +44,7 @@
   template:
     src: restic-backup.timer.j2
     dest: /etc/systemd/system/restic-backup.timer
+    mode: '0644'
   notify: systemd reload
 
 - name: Enable and start restic timer
