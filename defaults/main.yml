@@ -1,16 +1,15 @@
 ---
-
 restic_install: false
-restic_version: 0.9.6
+restic_version: 0.11.0
 restic_path: /usr/local/bin/restic
 restic_user: root
 restic_user_home: /root
 
 restic_repository_name: restic
 restic_default_folders:
-  - {path: '/etc'}
-  - {path: '/var/log'}
-  - {path: '/root', exclude: '--exclude .cache --exclude .local'}
+  - { path: '/etc' }
+  - { path: '/var/log' }
+  - { path: '/root', exclude: '--exclude .cache --exclude .local' }
 restic_folders: []
 restic_databases: []
 restic_dump_compression_enabled: false
