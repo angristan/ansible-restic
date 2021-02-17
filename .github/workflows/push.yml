@@ -9,6 +9,6 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-python@v2
-      - run: pip install ansible-lint
+      - run: pip install ansible ansible-lint
       - run: ansible-lint --version
       - run: ansible-lint .
