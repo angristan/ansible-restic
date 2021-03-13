@@ -9,7 +9,7 @@ restic_repository_name: restic
 restic_default_folders:
   - { path: '/etc' }
   - { path: '/var/log' }
-  - { path: '/root', exclude: '--exclude .cache --exclude .local' }
+  - { path: '/root', exclude: '--exclude .cache' }
 restic_folders: []
 restic_databases: []
 restic_dump_compression_enabled: false
