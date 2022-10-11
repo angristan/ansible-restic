@@ -1,6 +1,6 @@
 ---
 restic_install: false
-restic_version: 0.12.0
+restic_version: 0.14.0
 restic_path: /usr/local/bin/restic
 restic_user: root
 restic_user_home: /root
