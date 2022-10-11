@@ -7,9 +7,9 @@ restic_user_home: /root
 
 restic_repository_name: restic
 restic_default_folders:
-  - { path: '/etc' }
-  - { path: '/var/log' }
-  - { path: '/root', exclude: '--exclude .cache' }
+  - { path: "/etc" }
+  - { path: "/var/log" }
+  - { path: "/root", exclude: "--exclude .cache" }
 restic_folders: []
 restic_databases: []
 restic_dump_compression_enabled: false
@@ -21,7 +21,7 @@ restic_check: true
 restic_ssh_enabled: true
 restic_ssh_host: backup
 restic_ssh_port: 22
-restic_ssh_private_key_path: '/root/.ssh/backup'
+restic_ssh_private_key_path: "/root/.ssh/backup"
 
-restic_systemd_timer_on_calender: '*-*-* 03:00:00'
+restic_systemd_timer_on_calender: "*-*-* 03:00:00"
 restic_systemd_timer_randomized_delay_sec: 0

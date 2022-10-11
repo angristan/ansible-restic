@@ -1,54 +1,54 @@
 ---
 - name: Check if restic is installed
-  stat:
-    path: '{{ restic_path }}'
+  ansible.builtin.stat:
+    path: "{{ restic_path }}"
   register: restic_binary
 
 - include_tasks: install.yml
   when: not restic_binary.stat.exists or restic_install
 
 - name: Overwrite SSH config for backup server
-  template:
+  ansible.builtin.template:
     src: ssh_config.j2
-    dest: '{{ restic_user_home }}/.ssh/config'
+    dest: "{{ restic_user_home }}/.ssh/config"
     owner: root
     group: root
-    mode: '0600'
+    mode: "0600"
   when: restic_ssh_enabled
 
 - name: Add SSH private key
-  template:
+  ansible.builtin.template:
     src: ssh_private_key.j2
-    dest: '{{ restic_ssh_private_key_path }}'
-    mode: '0600'
+    dest: "{{ restic_ssh_private_key_path }}"
+    mode: "0600"
   when: restic_ssh_private_key is defined and restic_ssh_enabled
 
 - name: Add restic_env in home folder
-  template:
+  ansible.builtin.template:
     src: restic_env.j2
-    dest: '{{ restic_user_home }}/.restic_env'
+    dest: "{{ restic_user_home }}/.restic_env"
     owner: root
     group: root
-    mode: '0600'
+    mode: "0600"
 
 - name: Add systemd service for restic
-  template:
+  ansible.builtin.template:
     src: restic-backup.service.j2
     dest: /etc/systemd/system/restic-backup.service
-    mode: '0644'
+    mode: "0644"
   vars:
-    restic_folders_combined: '{{ restic_default_folders + restic_folders }}'
+    restic_folders_combined: "{{ restic_default_folders + restic_folders }}"
   notify: systemd reload
 
 - name: Add systemd timer for restic
-  template:
+  ansible.builtin.template:
     src: restic-backup.timer.j2
     dest: /etc/systemd/system/restic-backup.timer
-    mode: '0644'
+    mode: "0644"
   notify: systemd reload
 
 - name: Enable and start restic timer
-  systemd:
+  ansible.builtin.systemd:
     name: restic-backup.timer
     enabled: true
     state: started

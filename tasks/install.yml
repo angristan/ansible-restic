@@ -1,5 +1,4 @@
 ---
-
 - name: Install fuse (to mount repositories)
   apt:
     name: fuse
@@ -13,23 +12,23 @@
     name: pigz
 
 - name: Download restic
-  get_url:
-    url: 'https://github.com/restic/restic/releases/download/v{{ restic_version }}/restic_{{ restic_version }}_linux_amd64.bz2'
-    dest: '/tmp/restic_{{ restic_version }}_linux_amd64.bz2'
+  ansible.builtin.get_url:
+    url: "https://github.com/restic/restic/releases/download/v{{ restic_version }}/restic_{{ restic_version }}_linux_amd64.bz2"
+    dest: "/tmp/restic_{{ restic_version }}_linux_amd64.bz2"
 
 - name: Extract restic
-  command: 'bzip2 -d /tmp/restic_{{ restic_version }}_linux_amd64.bz2'
+  command: "bzip2 -d /tmp/restic_{{ restic_version }}_linux_amd64.bz2"
   args:
-    creates: '/tmp/restic_{{ restic_version }}_linux_amd64'
+    creates: "/tmp/restic_{{ restic_version }}_linux_amd64"
 
 - name: Install restic
-  copy:
+  ansible.builtin.copy:
     remote_src: true
-    src: '/tmp/restic_{{ restic_version }}_linux_amd64'
+    src: "/tmp/restic_{{ restic_version }}_linux_amd64"
     dest: "{{ restic_path }}"
     mode: 0755
 
 - name: Remove downloaded file
-  file:
-    path: '/tmp/restic_{{ restic_version }}_linux_amd64'
+  ansible.builtin.file:
+    path: "/tmp/restic_{{ restic_version }}_linux_amd64"
     state: absent
