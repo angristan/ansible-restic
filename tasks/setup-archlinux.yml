@@ -1,0 +1,4 @@
+---
+- name: Install bzip2 (to install restic)
+  ansible.builtin.pacman:
+    name: bzip2
