@@ -1,0 +1,12 @@
+---
+- name: Install fuse (to mount repositories)
+  apt:
+    name: fuse
+
+- name: Install bzip2 (to install restic)
+  apt:
+    name: bzip2
+
+- name: Install pigz (to compress db dumps)
+  apt:
+    name: pigz
