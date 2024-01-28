@@ -13,7 +13,7 @@
 
 - name: Download restic
   ansible.builtin.get_url:
-    url: "https://github.com/restic/restic/releases/download/v{{ restic_version }}/restic_{{ restic_version }}_linux_amd64.bz2"
+    url: "https://github.com/restic/restic/releases/download/v{{ restic_version }}/restic_{{ restic_version }}_linux_{{ ansible_architecture }}.bz2"
     dest: "/tmp/restic_{{ restic_version }}_linux_amd64.bz2"
 
 - name: Extract restic
