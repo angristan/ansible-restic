@@ -4,7 +4,8 @@
     path: "{{ restic_path }}"
   register: restic_binary
 
-- include_tasks: install.yml
+- name: Include install.yml if restic is not installed or restic_install is true
+  ansible.builtin.include_tasks: install.yml
   when: not restic_binary.stat.exists or restic_install
 
 - name: Overwrite SSH config for backup server
@@ -38,14 +39,14 @@
     mode: "0644"
   vars:
     restic_folders_combined: "{{ restic_default_folders + restic_folders }}"
-  notify: systemd reload
+  notify: Reload systemd
 
 - name: Add systemd timer for restic
   ansible.builtin.template:
     src: restic-backup.timer.j2
     dest: /etc/systemd/system/restic-backup.timer
     mode: "0644"
-  notify: systemd reload
+  notify: Reload systemd
 
 - name: Enable and start restic timer
   ansible.builtin.systemd:

@@ -1,23 +1,24 @@
 ---
 - name: Install fuse (to mount repositories)
-  apt:
+  ansible.builtin.apt:
     name: fuse
 
 - name: Install bzip2 (to install restic)
-  apt:
+  ansible.builtin.apt:
     name: bzip2
 
 - name: Install pigz (to compress db dumps)
-  apt:
+  ansible.builtin.apt:
     name: pigz
 
 - name: Download restic
   ansible.builtin.get_url:
     url: "https://github.com/restic/restic/releases/download/v{{ restic_version }}/restic_{{ restic_version }}_linux_{{ ansible_architecture }}.bz2"
     dest: "/tmp/restic_{{ restic_version }}_linux_amd64.bz2"
+    mode: "0644"
 
 - name: Extract restic
-  command: "bzip2 -d /tmp/restic_{{ restic_version }}_linux_amd64.bz2"
+  ansible.builtin.command: "bzip2 -d /tmp/restic_{{ restic_version }}_linux_amd64.bz2"
   args:
     creates: "/tmp/restic_{{ restic_version }}_linux_amd64"
 
@@ -26,7 +27,7 @@
     remote_src: true
     src: "/tmp/restic_{{ restic_version }}_linux_amd64"
     dest: "{{ restic_path }}"
-    mode: 0755
+    mode: "0755"
 
 - name: Remove downloaded file
   ansible.builtin.file:
