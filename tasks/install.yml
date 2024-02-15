@@ -13,23 +13,23 @@
 
 - name: Download restic
   ansible.builtin.get_url:
-    url: "https://github.com/restic/restic/releases/download/v{{ restic_version }}/restic_{{ restic_version }}_linux_{{ ansible_architecture }}.bz2"
-    dest: "/tmp/restic_{{ restic_version }}_linux_amd64.bz2"
+    url: "https://github.com/restic/restic/releases/download/v{{ restic_version }}/restic_{{ restic_version }}_linux_{{ restic_architecture }}.bz2"
+    dest: "/tmp/restic_{{ restic_version }}_linux_{{ restic_architecture }}.bz2"
     mode: "0644"
 
 - name: Extract restic
-  ansible.builtin.command: "bzip2 -d /tmp/restic_{{ restic_version }}_linux_amd64.bz2"
+  ansible.builtin.command: "bzip2 -d /tmp/restic_{{ restic_version }}_linux_{{ restic_architecture }}.bz2"
   args:
-    creates: "/tmp/restic_{{ restic_version }}_linux_amd64"
+    creates: "/tmp/restic_{{ restic_version }}_linux_{{ restic_architecture }}"
 
 - name: Install restic
   ansible.builtin.copy:
     remote_src: true
-    src: "/tmp/restic_{{ restic_version }}_linux_amd64"
+    src: "/tmp/restic_{{ restic_version }}_linux_{{ restic_architecture }}"
     dest: "{{ restic_path }}"
     mode: "0755"
 
 - name: Remove downloaded file
   ansible.builtin.file:
-    path: "/tmp/restic_{{ restic_version }}_linux_amd64"
+    path: "/tmp/restic_{{ restic_version }}_linux_{{ restic_architecture }}"
     state: absent
