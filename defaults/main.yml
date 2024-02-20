@@ -1,7 +1,6 @@
 ---
 restic_install: false
 restic_version: 0.14.0
-restic_architecture: "{{ 'amd64' if ansible_architecture == 'x86_64' else ansible_architecture }}"
 restic_path: /usr/local/bin/restic
 restic_user: root
 restic_user_home: /root
@@ -26,3 +25,8 @@ restic_ssh_private_key_path: "/root/.ssh/backup"
 
 restic_systemd_timer_on_calender: "*-*-* 03:00:00"
 restic_systemd_timer_randomized_delay_sec: 0
+
+restic_arch_map:
+  i386: '386'
+  x86_64: 'amd64'
+  aarch64: 'arm64'
