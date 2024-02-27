@@ -9,3 +9,9 @@ export RESTIC_PASSWORD={{ restic_password}}
 export AWS_ACCESS_KEY_ID={{ restic_aws_access_key_id}}
 export AWS_SECRET_ACCESS_KEY={{ restic_aws_secret_access_key}}
 {% endif %}
+
+{% if restic_swift_id is defined and restic_swift_key is defined %}
+export ST_AUTH={{ restic_swift_url}}
+export ST_USER={{ restic_swift_id}}
+export ST_KEY={{ restic_swift_key}}
+{% endif %}

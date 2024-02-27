@@ -19,6 +19,12 @@ Environment="AWS_ACCESS_KEY_ID={{ restic_aws_access_key_id}}"
 Environment="AWS_SECRET_ACCESS_KEY={{ restic_aws_secret_access_key}}"
 {% endif %}
 
+{% if restic_swift_id is defined and restic_swift_key is defined %}
+Environment="ST_AUTH={{ restic_swift_url}}"
+Environment="ST_USER={{ restic_swift_id}}"
+Environment="ST_KEY={{ restic_swift_key}}"
+{% endif %}
+
 {% if restic_check %}
 ExecStartPre={{ restic_path }} check
 {% endif -%}
