@@ -19,6 +19,8 @@ Environment="AWS_ACCESS_KEY_ID={{ restic_aws_access_key_id}}"
 Environment="AWS_SECRET_ACCESS_KEY={{ restic_aws_secret_access_key}}"
 {% endif %}
 
+ExecStartPre=/bin/sh -c '{{ restic_path }} snapshots || {{ restic_path }} init'
+
 {% if restic_check %}
 ExecStartPre={{ restic_path }} check
 {% endif -%}
