@@ -38,3 +38,7 @@ ExecStartPost={{ restic_path }} forget --keep-within {{ restic_forget_keep_withi
 {% if restic_prune %}
 ExecStartPost={{ restic_path }} prune
 {% endif -%}
+
+{% for restic_post_script in restic_post_scripts %}
+ExecStartPost={{ restic_post_script }}
+{% endfor -%}
