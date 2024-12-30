@@ -24,7 +24,8 @@ ExecStartPre={{ restic_path }} check
 {% endif -%}
 
 {% for folder in restic_folders_combined %}
-ExecStart={{ restic_path }} backup --verbose {{ folder.path }} {{ folder.exclude if folder.exclude is defined else '' }}
+ExecStart={{ restic_path }} backup --verbose {{ folder.path }} {% if folder.exclude is defined %}--exclude {{ folder.exclude }}{% endif %}
+
 {% endfor -%}
 
 {% for database in restic_databases %}
