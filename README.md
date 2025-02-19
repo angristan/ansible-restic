@@ -49,7 +49,7 @@ The SSH configuration will be written in `{{ restic_user_home }}/.ssh/config`.
 ### S3 backend configuration
 
 - `restic_ssh_enabled`: set to false
-- `restic_repository_name`: set to s3 endpoint + bucket, restic syntax (e.g. `s3:https://s3.fr-par.scw.cloud/restic-bucket`)
+- `restic_repository`: set to s3 endpoint + bucket, restic syntax (e.g. `s3:https://s3.fr-par.scw.cloud/restic-bucket`)
 - `restic_aws_access_key_id`: `AWS_ACCESS_KEY_ID`
 - `restic_aws_secret_access_key`: `AWS_SECRET_ACCESS_KEY`
 
