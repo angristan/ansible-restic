@@ -3,3 +3,4 @@ Host {{ restic_ssh_host }}
 	HostName {{ restic_ssh_hostname }}
 	IdentityFile {{ restic_ssh_private_key_path }}
 	Port {{ restic_ssh_port }}
+        {{ "StrictHostKeyChecking no" if restic_ssh_strict_host_key_checking == False else "StrictHostKeyChecking accept-new" if restic_ssh_strict_host_key_checking == "accept-new" else "" }}

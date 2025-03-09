@@ -40,6 +40,7 @@ Each database has a `name` property which will be the name of the restic snapsho
 The SSH configuration will be written in `{{ restic_user_home }}/.ssh/config`.
 
 - `restic_ssh_host`: backend name and SSH alias for the backup host
+- `restic_ssh_StrictHostKeyChecking`: True | False | accept-new  (default is True) # Show https://man.openbsd.org/ssh_config#StrictHostKeyChecking
 - `restic_ssh_user`: user for SSH connection
 - `restic_ssh_hostname`: actual SSH hostname of the backup machine
 - `restic_ssh_private_key`: private SSH key used to connect to the backup host
