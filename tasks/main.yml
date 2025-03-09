@@ -53,3 +53,19 @@
     name: restic-backup.timer
     enabled: true
     state: started
+
+- name: First generate restic completion
+  ansible.builtin.command:
+    cmd: "restic generate --{{ restic_completion_type }}-completion {{ restic_completion_file }}"
+    creates: "{{ restic_completion_file }}"
+  when: restic_completion | bool
+
+- name: Install restic-completion-autogen CRON for user {{ restic_user }}
+  ansible.builtin.cron:
+    name: "Update restic completion"
+    job: "restic generate --{{ restic_completion_type }}-completion {{ restic_completion_file }}"
+    user: "{{ restic_user }}"
+    special_time: "daily"
+    cron_file: restic-completion-autogen
+  when:
+    - restic_completion is true and restic_completion_autogen is true
