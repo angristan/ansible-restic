@@ -54,11 +54,11 @@
     enabled: true
     state: started
 
-- name: Generate restic completion
-  ansible.builtin.shell: "restic generate --{{ restic_completion_type }}-completion {{ restic_completion_file }}"
-  args:
+- name: First generate restic completion
+  ansible.builtin.command:
+    cmd: "restic generate --{{ restic_completion_type }}-completion {{ restic_completion_file }}"
     creates: "{{ restic_completion_file }}"
-  when: restic_completion is true
+  when: restic_completion | bool
 
 - name: Install restic-completion-autogen CRON for user {{ restic_user }}
   ansible.builtin.cron:
