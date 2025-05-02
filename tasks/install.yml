@@ -1,14 +1,14 @@
 ---
 - name: Install fuse (to mount repositories)
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name: fuse
 
 - name: Install bzip2 (to install restic)
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name: bzip2
 
 - name: Install pigz (to compress db dumps)
-  ansible.builtin.apt:
+  ansible.builtin.pakage:
     name: pigz
 
 - name: Download restic
