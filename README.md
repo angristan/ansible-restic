@@ -22,6 +22,10 @@ If you want to force the installation, overwrite the binary or update restic, yo
 - `restic_default_folders`: a default list of folders that restic will backup (`/etc/`, `/root` and `/var/log`)
 - `restic_folders`: the list of folder you want to backup
 - `restic_dump_compression_enabled`: enable piping to pigz for database dumps
+- `restic_completion`: enable CLI completion for restic
+- `restic_completion_type`: choice CLI completion for restic ( bash, zsh, fish, powershell )
+- `restic_completion_file`: select destination file of completion
+- `restic_completion_autogen`: enable cron for update CLI completion
 
 Each folder has a `path` and an `exclude` property (which defaults to nothing). The `exclude` property is the literal argument passed to restic (exemple: `--exclude .cache --exclude .local`).
 

@@ -26,6 +26,11 @@ restic_ssh_private_key_path: "/root/.ssh/backup"
 restic_systemd_timer_on_calender: "*-*-* 03:00:00"
 restic_systemd_timer_randomized_delay_sec: 0
 
+restic_completion: true
+restic_completion_autogen: true
+restic_completion_file: "/etc/bash_completion.d/restic"
+restic_completion_type: "bash"
+
 restic_arch_map:
   i386: '386'
   x86_64: 'amd64'
