@@ -62,6 +62,11 @@ The timer is configurable as follows:
 - `restic_systemd_timer_on_calender`: defines the `OnCalendar` directive (`*-*-* 03:00:00`)
 - `restic_systemd_timer_randomized_delay_sec`: Delay the timer by a random amount of time between 0 and the specified time value. (`0`)
 
+The systemd service is configurable follows:
+
+- `restic_systemd_restart_policy: Defines the systemd Restart= directive (Example: on-failure (default))`
+- `restic_systemd_restart_interval: Defines the delay before attempting a restart, applied to RestartSec= (Example: 60s (default))`
+
 See the [systemd.timer](https://www.freedesktop.org/software/systemd/man/systemd.timer.html) documentation for more information.
 
 You can see the logs of the backup with `journalctl`. (`journalctl -xefu restic-backup`).

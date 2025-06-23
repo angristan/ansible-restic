@@ -3,6 +3,9 @@ Description=Restic backup
 
 [Service]
 Type=oneshot
+Restart={{ restic_systemd_restart_policy }}
+RestartSec={{ restic_systemd_restart_interval }}
+
 User={{ restic_user }}
 
 CPUQuota={{ 25 * ansible_processor_vcpus }}%
