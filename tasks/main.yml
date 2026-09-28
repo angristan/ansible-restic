@@ -1,4 +1,15 @@
 ---
+- name: Validate restic credentials and repository
+  ansible.builtin.assert:
+    that:
+      - restic_password is defined
+      - restic_password | default('') | length > 0
+      - restic_ssh_enabled or (restic_repository is defined and restic_repository | length > 0)
+      - not restic_ssh_enabled or (restic_ssh_host | length > 0 and restic_repository_name | length > 0)
+      - (restic_aws_access_key_id | length == 0) == (restic_aws_secret_access_key | length == 0)
+    fail_msg: "Set a nonempty restic password and repository; supply both AWS credentials when using AWS."
+  no_log: true
+
 - name: Check if restic is installed
   ansible.builtin.stat:
     path: "{{ restic_path }}"
@@ -8,12 +19,31 @@
   ansible.builtin.include_tasks: install.yml
   when: not restic_binary.stat.exists or restic_install
 
+- name: Create restic credential directory
+  ansible.builtin.file:
+    path: "{{ restic_credentials_dir }}"
+    state: directory
+    owner: "{{ restic_user }}"
+    mode: "0700"
+
+- name: Check if restic timer already exists
+  ansible.builtin.stat:
+    path: /etc/systemd/system/restic-backup.timer
+  register: restic_timer_exists
+
+- name: Create SSH configuration directory
+  ansible.builtin.file:
+    path: "{{ restic_user_home }}/.ssh"
+    state: directory
+    owner: "{{ restic_user }}"
+    mode: "0700"
+  when: restic_ssh_enabled
+
 - name: Overwrite SSH config for backup server
   ansible.builtin.template:
     src: ssh_config.j2
     dest: "{{ restic_user_home }}/.ssh/config"
-    owner: root
-    group: root
+    owner: "{{ restic_user }}"
     mode: "0600"
   when: restic_ssh_enabled
 
@@ -21,16 +51,34 @@
   ansible.builtin.template:
     src: ssh_private_key.j2
     dest: "{{ restic_ssh_private_key_path }}"
+    owner: "{{ restic_user }}"
     mode: "0600"
   when: restic_ssh_private_key is defined and restic_ssh_enabled
+  no_log: true
 
-- name: Add restic_env in home folder
+- name: Store restic password outside systemd unit
+  ansible.builtin.copy:
+    content: "{{ restic_password }}\n"
+    dest: "{{ restic_password_file }}"
+    owner: "{{ restic_user }}"
+    mode: "0600"
+  no_log: true
+  notify: Restart restic timer
+
+- name: Add restic environment file
   ansible.builtin.template:
     src: restic_env.j2
-    dest: "{{ restic_user_home }}/.restic_env"
-    owner: root
-    group: root
+    dest: "{{ restic_credentials_dir }}/environment"
+    owner: "{{ restic_user }}"
     mode: "0600"
+  no_log: true
+  notify: Restart restic timer
+
+- name: Remove obsolete restic shell environment containing credentials
+  ansible.builtin.file:
+    path: "{{ restic_user_home }}/.restic_env"
+    state: absent
+  no_log: true
 
 - name: Add systemd service for restic
   ansible.builtin.template:
@@ -47,6 +95,9 @@
     dest: /etc/systemd/system/restic-backup.timer
     mode: "0644"
   notify: Reload systemd
+
+- name: Apply systemd unit changes before enabling timer
+  ansible.builtin.meta: flush_handlers
 
 - name: Enable and start restic timer
   ansible.builtin.systemd:

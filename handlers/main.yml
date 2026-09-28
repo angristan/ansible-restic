@@ -2,3 +2,9 @@
 - name: Reload systemd
   ansible.builtin.systemd:
     daemon_reload: true
+
+- name: Restart restic timer
+  ansible.builtin.systemd:
+    name: restic-backup.timer
+    state: restarted
+  when: restic_timer_exists.stat.exists

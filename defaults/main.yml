@@ -4,6 +4,8 @@ restic_version: 0.17.3
 restic_path: /usr/local/bin/restic
 restic_user: root
 restic_user_home: /root
+restic_credentials_dir: "{{ restic_user_home }}/.restic"
+restic_password_file: "{{ restic_credentials_dir }}/password"
 
 restic_repository_name: restic
 restic_default_folders:
@@ -22,6 +24,9 @@ restic_ssh_enabled: true
 restic_ssh_host: backup
 restic_ssh_port: 22
 restic_ssh_private_key_path: "/root/.ssh/backup"
+
+restic_aws_access_key_id: ""
+restic_aws_secret_access_key: ""
 
 restic_systemd_timer_on_calender: "*-*-* 03:00:00"
 restic_systemd_timer_randomized_delay_sec: 0

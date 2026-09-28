@@ -17,6 +17,8 @@ If you want to force the installation, overwrite the binary or update restic, yo
 - `restic_user`: user to run restic as (`root`)
 - `restic_user_home`: home directory of the restic_user (`/root`)
 - `restic_password`: password used for repository encryption
+- `restic_credentials_dir`: private directory for runtime credentials (`{{ restic_user_home }}/.restic`)
+- `restic_password_file`: restic password file (`{{ restic_credentials_dir }}/password`)
 - `restic_repository_name`: the name of the repository (`restic`)
 - `restic_check`: run `restic check` as `ExecStartPre` if true (`false`)
 - `restic_default_folders`: a default list of folders that restic will backup (`/etc/`, `/root` and `/var/log`)
@@ -55,7 +57,9 @@ The SSH configuration will be written in `{{ restic_user_home }}/.ssh/config`.
 
 ### Sytemd service and timer
 
-A `restic-backup.service` service will be created with all the parameters defined above. The service is of type `oneshot` and will be triggered periodically with `restic-backup.timer`.
+A `restic-backup.service` service will be created with all the parameters defined above. The service is of type `oneshot` and will be triggered periodically with `restic-backup.timer`. The unit references a private systemd `EnvironmentFile`; the restic password lives in a separate `0600` file read through `RESTIC_PASSWORD_FILE`. The private environment file also contains any cloud credentials. Neither the password nor cloud credentials appear in the unit or Ansible task output. The role rejects an empty password or repository and incomplete AWS credential pairs.
+
+On upgrade, the old `{{ restic_user_home }}/.restic_env` shell file is removed. Do not source the new environment file as a shell script. Replace any external references to the old file with the new password file and protected environment file. Changing credentials updates the files and restarts the timer; the next backup reads them without forcing an immediate backup. To restore a prior credential, restore its Vault value and rerun the role, then verify access with a manual backup on a test host. Protect any existing backup copies of the old shell file separately.
 
 The timer is configurable as follows:
 
@@ -114,7 +118,7 @@ S3 example:
     restic_password: mysuperduperpassword
 ```
 
-Of course, `restic_password` and `restic_ssh_private_key` should be stored using ansible-vault.
+Store real `restic_password`, cloud credentials and `restic_ssh_private_key` in Ansible Vault. The SSH key above is an illustrative example; never commit real private keys.
 
 ## License
 
